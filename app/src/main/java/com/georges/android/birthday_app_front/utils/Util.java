@@ -30,19 +30,29 @@ public class Util {
         return matcher.find();
     }*/
 
-    public static boolean isEmailValid(String email) {
+/*    public static boolean isEmailValid(String email) {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         if(pattern.matcher(email).matches() && email.length() > 5 && email.length() < 50){
             return true;
         }else {
             return false;}
-    }
+    }*/
 
     public static boolean isPasswordValid(String password) {
-        if(password.length() > 5 && password.length() < 30 ){
+        if(password.length() > 3 && password.length() < 50 ){
             return true;
         }else {
             return false;
         }
     }
+
+    public static boolean isUsernameValid(String password) {
+        if(password.length() > 3 && password.length() < 30 ){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
 }

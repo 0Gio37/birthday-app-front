@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">Mes rappels d\'anniversaires</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_username">Email Utilisateur</string>
+    <string name="prompt_username">Nom d\'utilisateur</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Se connecter</string>
     <string name="action_sign_in_short">Connexion</string>
     <string name="welcome">"Welcome !"</string>
-    <string name="invalid_email">Not a valid Email</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_username">Username must be supp to 3 and inf 30 characters</string>
+    <string name="invalid_password">Password must be supp to 3 and inf to 50 characters</string>
+    <string name="error_field_required">Input empty</string>
     <string name="login_failed">"Login failed"</string>
 </resources>
