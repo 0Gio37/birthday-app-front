@@ -21,6 +21,9 @@ import com.georges.android.birthday_app_front.databinding.ActivityLoginBinding;
 import com.georges.android.birthday_app_front.utils.Util;
 import com.georges.android.birthday_app_front.utils.UtilApi;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,9 +120,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallBack {
             map.put("password", password);
 
             UtilApi.post(UtilApi.URL_LOGIN,map,this);
-            //UtilApi.post("http://192.168.1.10:8080/users/",map,this);
-            //UtilApi.post("http://10.0.2.2:8080/users/",map,this);
-            //UtilApi.get("http://10.0.2.2:8080/users/",this);
+
         }
     }
 
@@ -133,17 +134,34 @@ public class LoginActivity extends AppCompatActivity implements ApiCallBack {
         mProgressView.setVisibility(View.INVISIBLE);
         handler.post(() -> {
             Log.d("lol", "fail: " + json);
-            Toast.makeText(this, json, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Utilisateur ou mot de passe érroné", Toast.LENGTH_SHORT).show();
         });
     }
 
     @Override
     public void success(final String json) {
+
         handler.post(() -> {
             Log.d("lol", "success: " + json);
-            Toast.makeText(this, "connexion", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "connexion...", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this,MainActivity.class);
-            startActivity(intent);
+
+            JSONObject jsonObject = null;
+            try {
+                String userId;
+                String userName;
+                String userPassword;
+                jsonObject = new JSONObject(json);
+                userId = jsonObject.getString("id");
+                userName = jsonObject.getString("username");
+                userPassword = jsonObject.getString("password");
+                intent.putExtra("id", userId);
+                intent.putExtra("username", userName);
+                intent.putExtra("passaword", userPassword);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

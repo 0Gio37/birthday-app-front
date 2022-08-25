@@ -43,7 +43,7 @@ public class UtilApi {
         });
     }
 
-    //method post (run with put)
+    //method post
     public static void post(String url, Map<String, String> map, final ApiCallBack callback) {
 
         MultipartBody.Builder requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
@@ -65,6 +65,7 @@ public class UtilApi {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
+                Log.d("response", response.toString());
                 if (response.isSuccessful())
                     callback.success(response.body().string());
                 else {
@@ -72,6 +73,9 @@ public class UtilApi {
                 }
             }
         });
+
+
+        //todo method put to create
     }
 
 
