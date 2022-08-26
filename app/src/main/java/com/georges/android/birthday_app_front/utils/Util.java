@@ -11,7 +11,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Util {
@@ -19,6 +21,10 @@ public class Util {
     private static final String PREF_FILE = "pref_file";
     private static final String USER = "user";
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat FORMAT_INPUT = new SimpleDateFormat("dd/MM/yyyy");
+    private static Calendar cal = null;
+    private static final String[] MONTH_LIST = { "JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI","JUIN","JUILLET","AOUT","SEPTEMEBRE","OCTOBRE","NOVEMBRE","DECEMBRE" };
+
 
     public static void setUser(Context context, String json) {
         // TODO : sauvegarder
@@ -36,6 +42,25 @@ public class Util {
         }else {
             return false;
         }
+    }
+
+    public static long getAge(Date date) {
+        long diff = System.currentTimeMillis() - date.getTime();
+        return diff / 31622400000l;
+    }
+
+    public static String getDayFromDate(Date date){
+        cal = Calendar.getInstance();
+        cal.setTime(date);
+        String month = cal.get(Calendar.MONTH)+"";
+        return cal.get(Calendar.DAY_OF_MONTH)+"";
+    }
+
+    public static String getMonthfromDate(Date date){
+        cal = Calendar.getInstance();
+        cal.setTime(date);
+        return MONTH_LIST[cal.get(Calendar.MONTH)];
+
     }
 
     public static boolean isUsernameValid(String password) {
@@ -64,6 +89,10 @@ public class Util {
         // TODO : trier la liste en fonction des mois d'anniversaire
 
         return listItems;
+    }
+
+    public static Date initDateFromEditText(String str) throws ParseException {
+        return FORMAT_INPUT.parse(str);
     }
 
 

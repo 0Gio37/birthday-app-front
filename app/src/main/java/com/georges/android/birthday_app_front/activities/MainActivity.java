@@ -3,27 +3,43 @@ package com.georges.android.birthday_app_front.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.AlertDialog;
 import android.app.LauncherActivity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
 import com.georges.android.birthday_app_front.R;
 import com.georges.android.birthday_app_front.adaptater.BirthdayAdaptater;
 import com.georges.android.birthday_app_front.models.Birthday;
 import com.georges.android.birthday_app_front.models.Users;
+import com.georges.android.birthday_app_front.utils.ApiCallBack;
 import com.georges.android.birthday_app_front.utils.Util;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import com.georges.android.birthday_app_front.utils.UtilApi;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
-public class MainActivity extends AppCompatActivity {
+import org.json.JSONException;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements ApiCallBack {
 
     private String json;
     private Users mUserLogged;
     private RecyclerView mRecylerViewListBirthdays;
     private BirthdayAdaptater mAdapter;
-    private List<Birthday> birthdayList;
+    private List<Birthday> mBirthdayList;
+    //private Button mBtnAddBirthday;
 
 
     @Override
@@ -36,9 +52,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             mUserLogged = new Users(json);
             Log.d("INTENT DU MAIN", json);
-            Log.d("ID USER", mUserLogged.getId().toString());
-            Log.d("ID NAME", mUserLogged.getUsername());
-            birthdayList = mUserLogged.getBirthdays();
+            mBirthdayList = mUserLogged.getBirthdays();
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -46,17 +60,42 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        //binding de la recylcler view
+        //binding recylcler view
         mRecylerViewListBirthdays = (RecyclerView) findViewById(R.id.my_recycler_view_list_birthdays);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRecylerViewListBirthdays.setLayoutManager(layoutManager);
 
-        //creation de l'instance adapter
-        mAdapter = new BirthdayAdaptater(this, birthdayList);
+        //crea instance adapter
+        mAdapter = new BirthdayAdaptater(this, mBirthdayList);
         mRecylerViewListBirthdays.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-
+        //créa btn add birthday
+        FloatingActionButton mBtnAddBirthday;
+        mBtnAddBirthday = findViewById(R.id.btn_add_birthday);
+        mBtnAddBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                View v = LayoutInflater.from(MainActivity.this).inflate(R.layout.add_new_birthday, null);
+                EditText newFirstname = (EditText) v.findViewById(R.id.edit_text_add_birthday_firstname);
+                EditText newLastname = (EditText) v.findViewById(R.id.edit_text_add_birthday_lastname);
+                EditText newDate = (EditText) v.findViewById(R.id.edit_text_add_birthday_date);
+                builder.setView(v);
+                builder.setTitle("Nouvel Anniversaire ?" );
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String addNewBirthdayFirstname = newFirstname.getText().toString();
+                        String addNewBirthdayLastname = newLastname.getText().toString();
+                        String addNewBirthdayDate = newDate.getText().toString();
+                        addNewBirthday(addNewBirthdayFirstname,addNewBirthdayLastname,addNewBirthdayDate);
+                    }
+                });
+                builder.setNegativeButton("ANNULER", null);
+                builder.create().show();
+            }
+        });
 
 
         //ArrayList<LauncherActivity.ListItem> listItems = Util.createListItems(mUserLogged.birthdays);
@@ -64,14 +103,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void addNewBirthday(String addNewBirthdayFirstname, String addNewBirthdayLastname, String addNewBirthdayDate) {
+        Date date = null;
+        try {
+            date = Util.initDateFromEditText(addNewBirthdayDate);
+            Birthday birthday = new Birthday(date,addNewBirthdayFirstname, addNewBirthdayLastname);
+
+            Map<String, String> map = new HashMap<>();
+            map.put("birthday-date", Util.printDate(birthday.date));
+            map.put("birthday-firstname", birthday.firstname);
+            map.put("birthday-lastname", birthday.lastname);
+            String urlPost = UtilApi.URL_POST_BIRTHDAY+"/"+mUserLogged.getId().toString()+"/birthdays";
+            UtilApi.post(urlPost,map,MainActivity.this);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
+    @Override
+    public void fail(String json) {
+        Log.d("FAIL ADD BIRTHDAY", "fail: " + json);
+    }
 
-
-
-
-
-
-
-
+    @Override
+    public void success(String json) {
+        Log.d("SUCCES ADD BIRTHDAY", "success: " + json);
+        Snackbar.make(findViewById(R.id.coordinator_root), "Anniversaire ajouté", Snackbar.LENGTH_LONG).show();
+    }
 }

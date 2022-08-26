@@ -18,6 +18,7 @@ import okhttp3.Response;
 public class UtilApi {
 
     public static final String URL_LOGIN = "http://10.0.2.2:8080/login";
+    public static final String URL_POST_BIRTHDAY = "http://10.0.2.2:8080/users";
     public static OkHttpClient client = new OkHttpClient();
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -50,12 +51,13 @@ public class UtilApi {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             requestBody.addFormDataPart(entry.getKey(), entry.getValue());
         }
-
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody.build())
                 .build();
-        Log.d("requestbidy", requestBody.toString());
+        Log.d("request url", url);
+        Log.d("request requestbody", requestBody.build().toString());
+        Log.d("request", request.toString());
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -71,12 +73,11 @@ public class UtilApi {
                 else {
                     callback.fail("onResponse error post: api response not valid");
                 }
-
             }
         });
 
 
-        //todo method put to create
+        //TODO method PUT to create
     }
 
 

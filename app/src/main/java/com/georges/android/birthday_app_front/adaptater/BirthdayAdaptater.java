@@ -3,6 +3,7 @@ package com.georges.android.birthday_app_front.adaptater;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.Transliterator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.georges.android.birthday_app_front.R;
 import com.georges.android.birthday_app_front.models.Birthday;
+import com.georges.android.birthday_app_front.utils.Util;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.ViewHolder> {
@@ -38,7 +41,12 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
     public void onBindViewHolder(@NonNull BirthdayAdaptater.ViewHolder holder, int position) {
         Birthday birthday = mBirthdays.get(position);
         String fullName = birthday.firstname+" "+birthday.lastname;
+        String dayDate = Util.getDayFromDate(birthday.date);
+        String monthDate = Util.getMonthfromDate(birthday.date);
         holder.mTexteViewItemName.setText(fullName);
+        holder.mTexteViewItemAge.setText(Util.getAge(birthday.date)+" ans");
+        holder.mTexteViewItemDateNumber.setText(dayDate);
+        holder.mTexteViewItemDateMonth.setText(monthDate);
         holder.mBirthday = birthday;
     }
 

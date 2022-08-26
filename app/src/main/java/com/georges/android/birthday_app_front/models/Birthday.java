@@ -14,9 +14,9 @@ public class Birthday {
     public Birthday(String json) throws JSONException, ParseException {
         JSONObject jsonObject = new JSONObject(json);
 
-        date = Util.initDateFromDB(jsonObject.getString("date"));
-        firstname = jsonObject.getString("firstname");
-        lastname = jsonObject.getString("lastname");
+        date = Util.initDateFromDB(jsonObject.getString("birthday-date"));
+        firstname = jsonObject.getString("birthday-firstname");
+        lastname = jsonObject.getString("birthday-lastname");
     }
 
     public Birthday(Date date, String firstname, String lastname) {
@@ -28,9 +28,9 @@ public class Birthday {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         try {
-            json.put("date", Util.printDate(date));
-            json.put("firstname", firstname);
-            json.put("lastname", lastname);
+            json.put("birthday-date", Util.printDate(date));
+            json.put("birthday-firstname", firstname);
+            json.put("birthday-lastname", lastname);
         } catch (JSONException e) {
         }
         return json;
