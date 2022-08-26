@@ -145,23 +145,9 @@ public class LoginActivity extends AppCompatActivity implements ApiCallBack {
             Log.d("lol", "success: " + json);
             Toast.makeText(this, "connexion...", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this,MainActivity.class);
+            intent.putExtra("userLogged",json);
+            startActivity(intent);
 
-            JSONObject jsonObject = null;
-            try {
-                String userId;
-                String userName;
-                String userPassword;
-                jsonObject = new JSONObject(json);
-                userId = jsonObject.getString("id");
-                userName = jsonObject.getString("username");
-                userPassword = jsonObject.getString("password");
-                intent.putExtra("id", userId);
-                intent.putExtra("username", userName);
-                intent.putExtra("passaword", userPassword);
-                startActivity(intent);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         });
     }
 }

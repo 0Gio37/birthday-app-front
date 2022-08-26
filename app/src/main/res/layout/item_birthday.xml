@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    android:orientation="horizontal"
+    android:paddingTop="4dp"
+    android:background="@drawable/background_theme">
+
+    <TextView
+        android:id="@+id/text_view_item_date_number"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        tools:text="24" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical"
+        android:paddingTop="3dp">
+
+        <TextView
+            android:id="@+id/text_view_item_date_month"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            tools:text="janvier" />
+
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/text_view_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="gio"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_view_item_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:text="33 ans"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+</LinearLayout>
