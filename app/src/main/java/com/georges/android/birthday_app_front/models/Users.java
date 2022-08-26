@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Users {
 
@@ -39,6 +40,14 @@ public class Users {
 
     public Long getId(){
         return this.id;
+    }
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public List<Birthday> getBirthdays(){
+        return birthdays;
     }
 
 

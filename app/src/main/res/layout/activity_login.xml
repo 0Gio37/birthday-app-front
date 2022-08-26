@@ -15,6 +15,7 @@
 
     <EditText
         android:id="@+id/edit_text_username"
+        android:textColor="@color/white"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
@@ -28,6 +29,7 @@
 
     <EditText
         android:id="@+id/edit_text_password"
+        android:textColor="@color/white"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

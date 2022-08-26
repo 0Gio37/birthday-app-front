@@ -1,11 +1,17 @@
 package com.georges.android.birthday_app_front.adaptater;
 
 import android.content.Context;
+import android.content.Intent;
+import android.icu.text.Transliterator;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.georges.android.birthday_app_front.R;
 import com.georges.android.birthday_app_front.models.Birthday;
 
 import java.util.List;
@@ -23,16 +29,41 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
     @NonNull
     @Override
     public BirthdayAdaptater.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View v = LayoutInflater.from(mContext).inflate(R.layout.item_birthday, parent, false);
+        ViewHolder viewHolder = new ViewHolder(v);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull BirthdayAdaptater.ViewHolder holder, int position) {
-
+        Birthday birthday = mBirthdays.get(position);
+        String fullName = birthday.firstname+" "+birthday.lastname;
+        holder.mTexteViewItemName.setText(fullName);
+        holder.mBirthday = birthday;
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mBirthdays.size();
     }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView mTexteViewItemDateNumber;
+        public TextView mTexteViewItemDateMonth;
+        public TextView mTexteViewItemName;
+        public TextView mTexteViewItemAge;
+        public Birthday mBirthday;
+
+
+        public ViewHolder(View view) {
+            super(view);
+            mTexteViewItemDateNumber = (TextView) view.findViewById(R.id.text_view_item_date_number);
+            mTexteViewItemDateMonth = (TextView) view.findViewById(R.id.text_view_item_date_month);
+            mTexteViewItemName = (TextView) view.findViewById(R.id.text_view_item_name);
+            mTexteViewItemAge = (TextView) view.findViewById(R.id.text_view_item_age);
+        }
+    }
+
+
+
 }

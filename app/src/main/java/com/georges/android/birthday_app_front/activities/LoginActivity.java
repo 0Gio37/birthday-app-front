@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallBack {
     public void success(final String json) {
 
         handler.post(() -> {
-            Log.d("lol", "success: " + json);
+            Log.d("INTENT DU LOGIN", "success: " + json);
             Toast.makeText(this, "connexion...", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this,MainActivity.class);
             intent.putExtra("userLogged",json);
