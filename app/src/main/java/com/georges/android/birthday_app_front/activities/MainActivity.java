@@ -46,16 +46,20 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Bundle bundle = getIntent().getExtras();
         json = bundle.getString("userLogged");
+
+        Log.d("INTENT DU MAIN", json);
+
         try {
             mUserLogged = new Users(json);
-            Log.d("INTENT DU MAIN", json);
+            Log.d("try", json);
             mBirthdayList = mUserLogged.getBirthdays();
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d("catch json", json);
         } catch (ParseException e) {
+            Log.d("catch parse", json);
             e.printStackTrace();
         }
 
@@ -110,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
             Birthday birthday = new Birthday(date,addNewBirthdayFirstname, addNewBirthdayLastname);
 
             Map<String, String> map = new HashMap<>();
-            map.put("birthday-date", Util.printDate(birthday.date));
-            map.put("birthday-firstname", birthday.firstname);
-            map.put("birthday-lastname", birthday.lastname);
+            map.put("date", Util.printDate(birthday.date));
+            map.put("firstname", birthday.firstname);
+            map.put("lastname", birthday.lastname);
             String urlPost = UtilApi.URL_POST_BIRTHDAY+"/"+mUserLogged.getId().toString()+"/birthdays";
             UtilApi.post(urlPost,map,MainActivity.this);
         } catch (ParseException e) {
