@@ -3,6 +3,7 @@ package com.georges.android.birthday_app_front.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.AlertDialog;
 import android.app.LauncherActivity;
@@ -26,6 +27,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,13 +55,11 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
 
         try {
             mUserLogged = new Users(json);
-            Log.d("try", json);
             mBirthdayList = mUserLogged.getBirthdays();
+            Util.createSortedListItems(mBirthdayList);
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d("catch json", json);
         } catch (ParseException e) {
-            Log.d("catch parse", json);
             e.printStackTrace();
         }
 
@@ -70,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
 
         //crea instance adapter
         mAdapter = new BirthdayAdaptater(this, mBirthdayList, mUserLogged.id);
-        Log.d("id user in main", mUserLogged.id.toString());
-        Log.d("id user in main", mUserLogged.getId().toString());
         mRecylerViewListBirthdays.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -107,9 +106,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
 
     }
 
-    public Long getUserLoggedId(){
-        return mUserLogged.getId();
-    }
 
 
     public void addNewBirthday(String addNewBirthdayFirstname, String addNewBirthdayLastname, String addNewBirthdayDate) {
@@ -127,8 +123,8 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
+
 
 
     @Override

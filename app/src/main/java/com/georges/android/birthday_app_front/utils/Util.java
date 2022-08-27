@@ -2,8 +2,10 @@ package com.georges.android.birthday_app_front.utils;
 
 import android.app.LauncherActivity;
 import android.content.Context;
+import android.util.Log;
 import android.util.Patterns;
 
+import com.georges.android.birthday_app_front.activities.MainActivity;
 import com.georges.android.birthday_app_front.models.Birthday;
 import com.georges.android.birthday_app_front.models.Users;
 import org.json.JSONException;
@@ -12,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,6 +27,8 @@ public class Util {
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat FORMAT_INPUT = new SimpleDateFormat("dd/MM/yyyy");
     private static Calendar cal = null;
+    private static Calendar cal1 = null;
+    private static Calendar cal2 = null;
     private static final String[] MONTH_LIST = { "JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI","JUIN","JUILLET","AOUT","SEPTEMEBRE","OCTOBRE","NOVEMBRE","DECEMBRE" };
 
 
@@ -79,17 +85,49 @@ public class Util {
         return FORMAT.parse(str);
     }
 
-    public static ArrayList<LauncherActivity.ListItem> createListItems(ArrayList<Birthday> birthdays) {
+    public static List<Birthday> createSortedListItems(List<Birthday> birthdays) {
+        List<LauncherActivity.ListItem> listItems = new ArrayList<>();
+        Log.d("tb before", birthdays.toString());
 
-        ArrayList<LauncherActivity.ListItem> listItems = new ArrayList<>();
+
+
+
+
+//Sorting
+        Collections.sort(birthdays, new Comparator<Birthday>() {
+            @Override
+            public int compare(Birthday b1, Birthday b2) {
+                cal1 = Calendar.getInstance();
+                cal1.setTime(b1.date);
+                cal2 = Calendar.getInstance();
+                cal2.setTime(b2.date);
+                if (cal1.get(Calendar.MONTH) < cal2.get(Calendar.MONTH))
+                    return -1;
+                else if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH))
+                    return 0;
+                else
+                    return 1;
+            }
+        });
+
+      /*  Log.d("tb after", birthdays.toString());
+
+        for (Birthday birthday : birthdays) {
+            cal.setTime(birthday.date);
+            int numberMonth = cal.get(Calendar.MONTH);
+            Log.d("month number", numberMonth+"");
+            
+        }*/
 
         int monthNumber = 0;
         String[] months = {"Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"};
 
         // TODO : trier la liste en fonction des mois d'anniversaire
 
-        return listItems;
+        return birthdays;
     }
+    
+    
 
     public static Date initDateFromEditText(String str) throws ParseException {
         return FORMAT_INPUT.parse(str);

@@ -9,34 +9,42 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.georges.android.birthday_app_front.R;
 import com.georges.android.birthday_app_front.activities.MainActivity;
 import com.georges.android.birthday_app_front.models.Birthday;
 import com.georges.android.birthday_app_front.utils.ApiCallBack;
 import com.georges.android.birthday_app_front.utils.Util;
 import com.georges.android.birthday_app_front.utils.UtilApi;
-
-import java.util.Calendar;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import okhttp3.MultipartBody;
 
 public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.ViewHolder> implements ApiCallBack {
 
     private Context mContext;
     private List<Birthday> mBirthdays;
-    private Long id;
-    private MainActivity mainActivity;
+    private Long mUserLoggedId;
+    private String json;
 
-    public BirthdayAdaptater(Context mContext, List<Birthday> mBirthdays, Long id){
+
+    public BirthdayAdaptater(Context mContext, List<Birthday> mBirthdays, Long mUserLoggedId){
         this.mContext = mContext;
         this.mBirthdays = mBirthdays;
-        this.id = id;
+        this.mUserLoggedId = mUserLoggedId;
+        this.json = json;
     }
 
     @NonNull
@@ -44,6 +52,8 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
     public BirthdayAdaptater.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.item_birthday, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
+        Log.d("userIDloggedAdaptater",mUserLoggedId.toString());
+        Log.d("tb birthays", mBirthdays.toString());
         return viewHolder;
     }
 
@@ -67,12 +77,12 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
 
     @Override
     public void fail(String json) {
-
+        Log.d("FAIL ADD BIRTHDAY", "fail: " + json);
     }
 
     @Override
     public void success(String json) {
-
+        Log.d("SUCCES ADD BIRTHDAY", "success: " + json);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
@@ -93,27 +103,53 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
             view.setOnLongClickListener(this);
         }
 
+
         @Override
         public boolean onLongClick(View v) {
-            String selectedAnniversaire = mBirthday.firstname +" "+mBirthday.lastname+mBirthday+mBirthday;
+            String selectedAnniversaire = mTexteViewItemName.getText().toString();
             String idSelectedBirthday = mBirthday.id;
             final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setTitle("Anniversaire de "+selectedAnniversaire);
+            builder.setTitle("Anniversaire de : "+selectedAnniversaire);
             builder.setPositiveButton("MODIFIER", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-            //TODO
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    View v = LayoutInflater.from(mContext).inflate(R.layout.add_new_birthday, null);
+                    EditText newFirstname = (EditText) v.findViewById(R.id.edit_text_add_birthday_firstname);
+                    EditText newLastname = (EditText) v.findViewById(R.id.edit_text_add_birthday_lastname);
+                    EditText newDate = (EditText) v.findViewById(R.id.edit_text_add_birthday_date);
+                    builder.setView(v);
+                    builder.setTitle("Nouvelles valeurs : " );
+                    builder.setPositiveButton("MODIFIER", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Date date = null;
+                            try {
+                                date = Util.initDateFromEditText(newDate.getText().toString());
+                                Birthday birthday = new Birthday(null,date,newFirstname.getText().toString(), newLastname.getText().toString());
+                                Map<String, String> map = new HashMap<>();
+                                map.put("id", mBirthday.id);
+                                map.put("date", Util.printDate(birthday.date));
+                                map.put("firstname", birthday.firstname);
+                                map.put("lastname", birthday.lastname);
+                                String urlPut = UtilApi.URL_BIRTHDAY+"/"+mUserLoggedId.toString()+"/birthdays";
+                                UtilApi.put(urlPut,map,BirthdayAdaptater.this);
+                                notifyDataSetChanged();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("ANNULER", null);
+                    builder.create().show();
                 }
             });
             builder.setNegativeButton("SUPPRIMER", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    String urlDelete = UtilApi.URL_BIRTHDAY+"/"+id.toString()+"/birthdays";
-
+                    String urlDelete = UtilApi.URL_BIRTHDAY+"/"+mUserLoggedId.toString()+"/birthdays";
                     UtilApi.delete(urlDelete, mBirthday.id,BirthdayAdaptater.this);
-                    Log.d("urlDelete", urlDelete);
-                    Log.d("id birthday", mBirthday.id);
-
+                    notifyDataSetChanged();
                 }
             });
             builder.create().show();
