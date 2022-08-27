@@ -7,8 +7,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.AlertDialog;
 import android.app.LauncherActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
     private RecyclerView mRecylerViewListBirthdays;
     private BirthdayAdaptater mAdapter;
     private List<Birthday> mBirthdayList;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
 
         try {
             mUserLogged = new Users(json);
+            saveLoggedUser();
             mBirthdayList = mUserLogged.getBirthdays();
             Util.createSortedListItems(mBirthdayList);
         } catch (JSONException e) {
@@ -100,10 +104,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
                 builder.create().show();
             }
         });
-
-
-        //ArrayList<LauncherActivity.ListItem> listItems = Util.createListItems(mUserLogged.birthdays);
-
     }
 
 
@@ -137,4 +137,15 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
         Log.d("SUCCES ADD BIRTHDAY", "success: " + json);
         Snackbar.make(findViewById(R.id.coordinator_root), "Anniversaire ajouté", Snackbar.LENGTH_LONG).show();
     }
+
+    private void saveLoggedUser(){
+        sharedPreferences = this.getSharedPreferences("logUserInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userLogged", "logged");
+        editor.putString("jsonUser", json);
+        editor.apply();
+        Log.d("allshared", sharedPreferences.getAll().toString());
+
+    }
+
 }

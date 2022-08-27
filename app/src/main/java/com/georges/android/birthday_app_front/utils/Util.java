@@ -87,13 +87,7 @@ public class Util {
 
     public static List<Birthday> createSortedListItems(List<Birthday> birthdays) {
         List<LauncherActivity.ListItem> listItems = new ArrayList<>();
-        Log.d("tb before", birthdays.toString());
 
-
-
-
-
-//Sorting
         Collections.sort(birthdays, new Comparator<Birthday>() {
             @Override
             public int compare(Birthday b1, Birthday b2) {
@@ -109,21 +103,6 @@ public class Util {
                     return 1;
             }
         });
-
-      /*  Log.d("tb after", birthdays.toString());
-
-        for (Birthday birthday : birthdays) {
-            cal.setTime(birthday.date);
-            int numberMonth = cal.get(Calendar.MONTH);
-            Log.d("month number", numberMonth+"");
-            
-        }*/
-
-        int monthNumber = 0;
-        String[] months = {"Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"};
-
-        // TODO : trier la liste en fonction des mois d'anniversaire
-
         return birthdays;
     }
     
