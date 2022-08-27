@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
     private RecyclerView mRecylerViewListBirthdays;
     private BirthdayAdaptater mAdapter;
     private List<Birthday> mBirthdayList;
-    //private Button mBtnAddBirthday;
 
 
     @Override
@@ -70,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
         mRecylerViewListBirthdays.setLayoutManager(layoutManager);
 
         //crea instance adapter
-        mAdapter = new BirthdayAdaptater(this, mBirthdayList);
+        mAdapter = new BirthdayAdaptater(this, mBirthdayList, mUserLogged.id);
+        Log.d("id user in main", mUserLogged.id.toString());
+        Log.d("id user in main", mUserLogged.getId().toString());
         mRecylerViewListBirthdays.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -106,18 +107,22 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
 
     }
 
+    public Long getUserLoggedId(){
+        return mUserLogged.getId();
+    }
+
 
     public void addNewBirthday(String addNewBirthdayFirstname, String addNewBirthdayLastname, String addNewBirthdayDate) {
         Date date = null;
         try {
             date = Util.initDateFromEditText(addNewBirthdayDate);
-            Birthday birthday = new Birthday(date,addNewBirthdayFirstname, addNewBirthdayLastname);
+            Birthday birthday = new Birthday(null,date,addNewBirthdayFirstname, addNewBirthdayLastname);
 
             Map<String, String> map = new HashMap<>();
             map.put("date", Util.printDate(birthday.date));
             map.put("firstname", birthday.firstname);
             map.put("lastname", birthday.lastname);
-            String urlPost = UtilApi.URL_POST_BIRTHDAY+"/"+mUserLogged.getId().toString()+"/birthdays";
+            String urlPost = UtilApi.URL_BIRTHDAY+"/"+mUserLogged.getId().toString()+"/birthdays";
             UtilApi.post(urlPost,map,MainActivity.this);
         } catch (ParseException e) {
             e.printStackTrace();
