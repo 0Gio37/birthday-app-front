@@ -134,6 +134,7 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
                                 map.put("lastname", birthday.lastname);
                                 String urlPut = UtilApi.URL_BIRTHDAY+"/"+mUserLoggedId.toString()+"/birthdays";
                                 UtilApi.put(urlPut,map,BirthdayAdaptater.this);
+                                Toast.makeText(mContext, "Anniversaire modifié", Toast.LENGTH_SHORT).show();
                                 notifyDataSetChanged();
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -149,6 +150,7 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
                 public void onClick(DialogInterface dialogInterface, int i) {
                     String urlDelete = UtilApi.URL_BIRTHDAY+"/"+mUserLoggedId.toString()+"/birthdays";
                     UtilApi.delete(urlDelete, mBirthday.id,BirthdayAdaptater.this);
+                    Toast.makeText(mContext, "Anniversaire supprimé", Toast.LENGTH_SHORT).show();
                     notifyDataSetChanged();
                 }
             });
