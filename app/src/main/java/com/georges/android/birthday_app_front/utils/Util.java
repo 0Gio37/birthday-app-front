@@ -43,7 +43,7 @@ public class Util {
 
 
     public static boolean isPasswordValid(String password) {
-        if(password.length() > 3 && password.length() < 50 ){
+        if(password.length() >= 3 && password.length() < 50 ){
             return true;
         }else {
             return false;
@@ -70,7 +70,7 @@ public class Util {
     }
 
     public static boolean isUsernameValid(String password) {
-        if(password.length() > 3 && password.length() < 30 ){
+        if(password.length() >= 3 && password.length() < 30 ){
             return true;
         }else {
             return false;
