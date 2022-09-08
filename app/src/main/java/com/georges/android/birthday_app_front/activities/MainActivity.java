@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
         mRecylerViewListBirthdays.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
+
         //créa btn add birthday
         FloatingActionButton mBtnAddBirthday;
         mBtnAddBirthday = findViewById(R.id.btn_add_birthday);
@@ -105,12 +106,19 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
             date = Util.initDateFromEditText(addNewBirthdayDate);
             Birthday birthday = new Birthday(null,date,addNewBirthdayFirstname, addNewBirthdayLastname);
 
+
+
             Map<String, String> map = new HashMap<>();
             map.put("date", Util.printDate(birthday.date));
             map.put("firstname", birthday.firstname);
             map.put("lastname", birthday.lastname);
             String urlPost = UtilApi.URL_BIRTHDAY+"/"+mUserLogged.getId().toString()+"/birthdays";
             UtilApi.post(urlPost,map,MainActivity.this);
+
+            //MAJ birthdayList recycler and list of birhdays
+            mBirthdayList.add(birthday);
+            mAdapter.notifyDataSetChanged();
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -135,4 +143,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
         editor.putString("jsonUser", json);
         editor.apply();
     }
+
+
 }
