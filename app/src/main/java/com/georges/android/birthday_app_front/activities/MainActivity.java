@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
         json = bundle.getString("userLogged");
-
         Log.d("INTENT DU MAIN", json);
 
         try {
@@ -105,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
         try {
             date = Util.initDateFromEditText(addNewBirthdayDate);
             Birthday birthday = new Birthday(null,date,addNewBirthdayFirstname, addNewBirthdayLastname);
-
-
 
             Map<String, String> map = new HashMap<>();
             map.put("date", Util.printDate(birthday.date));
