@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallBack {
 
             //MAJ birthdayList recycler and list of birhdays
             mBirthdayList.add(birthday);
+            Util.createSortedListItems(mBirthdayList);
             mAdapter.notifyDataSetChanged();
 
         } catch (ParseException e) {

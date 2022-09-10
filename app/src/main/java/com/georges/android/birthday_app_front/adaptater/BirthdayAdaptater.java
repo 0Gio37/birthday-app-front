@@ -142,6 +142,7 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
                                     }
                                 }
                                 Toast.makeText(mContext, "Anniversaire modifié", Toast.LENGTH_SHORT).show();
+                                Util.createSortedListItems(mBirthdays);
                                 notifyDataSetChanged();
                             } catch (ParseException e) {
                                 e.printStackTrace();
