@@ -40,4 +40,25 @@ public class Birthday {
         return json;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    @Override
+    public String toString(){
+        return "-"+this.id+" "+this.date+" "+this.firstname+" "+this.lastname+"-";
+    }
+
 }
