@@ -99,7 +99,6 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
             mTexteViewItemDateMonth = (TextView) view.findViewById(R.id.text_view_item_date_month);
             mTexteViewItemName = (TextView) view.findViewById(R.id.text_view_item_name);
             mTexteViewItemAge = (TextView) view.findViewById(R.id.text_view_item_age);
-
             view.setOnLongClickListener(this);
         }
 
@@ -107,7 +106,6 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
         @Override
         public boolean onLongClick(View v) {
             String selectedAnniversaire = mTexteViewItemName.getText().toString();
-            String idSelectedBirthday = mBirthday.id;
             final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle("Anniversaire de : "+selectedAnniversaire);
             builder.setPositiveButton("MODIFIER", new DialogInterface.OnClickListener() {
@@ -134,6 +132,15 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
                                 map.put("lastname", birthday.lastname);
                                 String urlPut = UtilApi.URL_BIRTHDAY+"/"+mUserLoggedId.toString()+"/birthdays";
                                 UtilApi.put(urlPut,map,BirthdayAdaptater.this);
+
+                                for (Birthday selectedBirthday : mBirthdays
+                                ) {
+                                    if (selectedBirthday.getId() == mBirthday.id){
+                                        selectedBirthday.setDate(birthday.date);
+                                        selectedBirthday.setFirstname(birthday.firstname);
+                                        selectedBirthday.setLastname(birthday.lastname);
+                                    }
+                                }
                                 Toast.makeText(mContext, "Anniversaire modifié", Toast.LENGTH_SHORT).show();
                                 notifyDataSetChanged();
                             } catch (ParseException e) {
@@ -150,6 +157,12 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
                 public void onClick(DialogInterface dialogInterface, int i) {
                     String urlDelete = UtilApi.URL_BIRTHDAY+"/"+mUserLoggedId.toString()+"/birthdays";
                     UtilApi.delete(urlDelete, mBirthday.id,BirthdayAdaptater.this);
+                    for (Birthday selectedBirthday : mBirthdays
+                    ) {
+                        if (selectedBirthday.getId() == mBirthday.id){
+                            mBirthdays.remove(selectedBirthday);
+                        }
+                    }
                     Toast.makeText(mContext, "Anniversaire supprimé", Toast.LENGTH_SHORT).show();
                     notifyDataSetChanged();
                 }
