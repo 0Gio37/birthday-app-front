@@ -92,7 +92,6 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
         public TextView mTexteViewItemAge;
         public Birthday mBirthday;
 
-
         public ViewHolder(View view) {
             super(view);
             mTexteViewItemDateNumber = (TextView) view.findViewById(R.id.text_view_item_date_number);
@@ -116,9 +115,11 @@ public class BirthdayAdaptater extends RecyclerView.Adapter<BirthdayAdaptater.Vi
                     EditText newFirstname = (EditText) v.findViewById(R.id.edit_text_add_birthday_firstname);
                     EditText newLastname = (EditText) v.findViewById(R.id.edit_text_add_birthday_lastname);
                     EditText newDate = (EditText) v.findViewById(R.id.edit_text_add_birthday_date);
+                    newFirstname.setText(mBirthday.firstname);
+                    newLastname.setText(mBirthday.lastname);
                     builder.setView(v);
-                    builder.setTitle("Nouvelles valeurs : " );
-                    builder.setPositiveButton("MODIFIER", new DialogInterface.OnClickListener() {
+                    builder.setTitle("Modifier : " );
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Date date = null;
