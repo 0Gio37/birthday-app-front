@@ -1,6 +1,10 @@
 package com.georges.android.birthday_app_front.activities;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Handler;
@@ -8,8 +12,10 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -20,6 +26,7 @@ import com.georges.android.birthday_app_front.utils.ApiCallBack;
 import com.georges.android.birthday_app_front.databinding.ActivityLoginBinding;
 import com.georges.android.birthday_app_front.utils.Util;
 import com.georges.android.birthday_app_front.utils.UtilApi;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,8 +87,25 @@ public class LoginActivity extends AppCompatActivity implements ApiCallBack {
         });
         //valid btn connexion 2 (click)
         mLoginBtnView.setOnClickListener(v -> {
-            attemptLogin();
+            connexionTest();//
         });
+    }
+
+    //internet connexion test
+    private void connexionTest(){
+        ConnectivityManager connMgr =(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnected()){
+            attemptLogin();
+        } else{
+            //hide virtual keybord
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+            Snackbar.make(findViewById(R.id.container), "Pas de connexion internet !", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     //methode de validation de login
